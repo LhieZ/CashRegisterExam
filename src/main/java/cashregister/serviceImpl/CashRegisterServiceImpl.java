@@ -80,6 +80,7 @@ public class CashRegisterServiceImpl implements CashRegisterService {
                 counter++;
             }
             setCountsAndTotal(newDenominationCount);
+            System.out.println(cashRegisterModel);
         }
     }
 
@@ -95,6 +96,7 @@ public class CashRegisterServiceImpl implements CashRegisterService {
                 counter++;
             }
             setCountsAndTotal(denominationCountAdded);
+            System.out.println(cashRegisterModel);
         }
     }
 
@@ -117,6 +119,8 @@ public class CashRegisterServiceImpl implements CashRegisterService {
     }
 
     private void setNewValues(AtomicInteger change, AtomicInteger counter, List<Integer> newDenominationCounts) {
+        int holdChange = change.get();
+
         denominations.forEach(denomination -> {
             newDenominationCounts.add(cashRegisterModel.getDenominationCounts().get(counter.get()));
 
@@ -129,14 +133,17 @@ public class CashRegisterServiceImpl implements CashRegisterService {
             counter.getAndIncrement();
         });
 
-        validateNewDenominationCounts(newDenominationCounts);
+        validateNewDenominationCounts(newDenominationCounts, holdChange);
     }
 
-    private void validateNewDenominationCounts(List<Integer> newDenominationCounts) {
-        if (Arrays.equals(cashRegisterModel.getDenominationCounts().toArray(new Integer[0]), newDenominationCounts.toArray()) || cashRegisterModel.getTotal() == 0) {
+    private void validateNewDenominationCounts(List<Integer> newDenominationCounts, int holdChange) {
+        int holdTotal = cashRegisterModel.getTotal();
+        setCountsAndTotal(newDenominationCounts);
+
+        if (holdTotal - holdChange != cashRegisterModel.getTotal() ){
             System.out.println("Sorry");
-        } else {
-            setCountsAndTotal(newDenominationCounts);
+        }else{
+            System.out.println(cashRegisterModel);
         }
     }
 
@@ -149,6 +156,5 @@ public class CashRegisterServiceImpl implements CashRegisterService {
     private void setCountsAndTotal(List<Integer> newDenominationCount) {
         cashRegisterModel.setDenominationCounts(newDenominationCount);
         cashRegisterModel.setTotal(computeTotal(cashRegisterModel));
-        System.out.println(cashRegisterModel);
     }
 }
