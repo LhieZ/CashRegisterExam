@@ -140,9 +140,9 @@ public class CashRegisterServiceImpl implements CashRegisterService {
         int holdTotal = cashRegisterModel.getTotal();
         setCountsAndTotal(newDenominationCounts);
 
-        if (holdTotal - holdChange != cashRegisterModel.getTotal() ){
+        if (holdTotal - holdChange != cashRegisterModel.getTotal()) {
             System.out.println("Sorry");
-        }else{
+        } else {
             System.out.println(cashRegisterModel);
         }
     }
